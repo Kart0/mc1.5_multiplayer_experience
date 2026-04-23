@@ -1,11 +1,1 @@
-[
-  {
-    "version-minecraft": "1.21.11",
-    "new-version-minecraft": false,
-    "line-text-1": "§6¡ATENCIÓN!",
-    "line-text-2": "§eActualización necesaria para futuros parches",
-    "version": "0.1.2",
-    "download": "https://i.imgur.com/NwJEyGV.gif",
-    "changelog": "Actualización clave para obtener futuras actualizaciones de manera rápida."
-  }
-]
+version = "0.1.2"
