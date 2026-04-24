@@ -1,4 +1,4 @@
-## **HOTFIX V0.1.2**
+## **HOTFIX V0.1.1**
 
 Cambios menores realizados para arreglar inconsistencias visuales en interfaces y gameplay
 
