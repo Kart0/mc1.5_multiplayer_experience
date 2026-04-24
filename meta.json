@@ -22,16 +22,6 @@
 					"base": "www.youtube.com"
 				}
 			}
-		},
-		{
-			"id": "0.2.1",
-			"releasedAt": 1777056685856,
-			"promotions": {
-				"downloads": {
-					"modrinth": "https://modrinth.com/",
-					"generic": "https://skmedix.pl/"
-				}
-			}
 		}
     ]
 }
