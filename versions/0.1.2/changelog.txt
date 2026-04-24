@@ -1,0 +1,11 @@
+## **HOTFIX V0.1.2**
+
+Cambios menores realizados para arreglar inconsistencias visuales en interfaces y gameplay
+
+
+***Nota del desarrollador***
+
+*Estoy pensando en agregar un notificador de actualización, espero encontrar alguno compatible con ésta versión*
+
+
+**-karto**

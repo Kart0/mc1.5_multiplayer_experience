@@ -1,0 +1,13 @@
+## **BETA inicial de MC1.5 -MP-**
+
+### **OBJETIVO**
+
+El objetivo de ésta versión es tratar de brindar todas las mejoras gráficas posibles (de todas las que se admiten) para poder entrar a cualquier servidor MULTIJUGADOR, sea SKYWARS, SMP, UHC, etc etc etc
+
+
+***Nota del desarrollador***
+
+*Espero poder tener el tiempo necesario para poder revisar y lanzar parches para corregir los errores que aparezcan durante éste primer parche y fase de prueba, quisiera tener la máxima retroalimentación posible de parte de ustedes*
+
+
+**-karto**
