@@ -1,7 +1,5 @@
 {
-  "version1": "0",
-  "version2": "1",
-  "version3": "2",
+  "version": "0.1.2",
   "message": "Hay una actualización obligatoria disponible.",
   "download": "https://i.imgur.com/NwJEyGV.gif"
 }
