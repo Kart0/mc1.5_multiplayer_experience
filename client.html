@@ -7,6 +7,7 @@
     <!-- Incluir Marked.js para soporte Markdown -->
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <style>
+        /* (Aquí va TODO el CSS que ya tenías, sin cambios) */
         @font-face {
             font-family: 'Minecraft';
             src: url('media_files/MinecraftRegular-Bmg3.otf') format('opentype');
@@ -141,7 +142,6 @@
             box-shadow: 0 0 30px rgba(0, 0, 0, 0.6);
         }
 
-        /* Botón de volver atrás */
         .back-button {
             position: fixed;
             top: 30px;
@@ -189,7 +189,6 @@
             transform: translateY(0);
         }
 
-        /* Estilos para la versión base (siempre visible arriba) */
         .base-version-section {
             margin-bottom: 20px;
             border-bottom: 2px solid rgba(255, 215, 0, 0.3);
@@ -214,7 +213,6 @@
             color: #FFD700;
         }
 
-        /* Separador entre versión base y actualizaciones */
         .updates-section {
             margin-top: 10px;
         }
@@ -272,7 +270,6 @@
             opacity: 0.8;
         }
 
-        /* Botón cuadrado para descargar */
         .version-button {
             width: 40px;
             height: 40px;
@@ -293,18 +290,8 @@
             z-index: 2;
         }
 
-        /* La versión base SIEMPRE tiene el botón visible */
-        .base-version .version-button {
-            opacity: 1 !important;
-            visibility: visible !important;
-        }
-
-        /* La versión más reciente entre las actualizaciones tiene botón visible */
-        .version-item:first-child .version-button {
-            opacity: 1;
-            visibility: visible;
-        }
-
+        /* La versión base SIEMPRE tiene el botón visible (pero ahora condicionado por existencia de enlaces) */
+        /* El CSS no cambia, la lógica está en JS */
         .version-button::before {
             content: '';
             position: absolute;
@@ -333,7 +320,6 @@
             transform: translateY(0);
         }
 
-        /* Modal de selección */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -441,7 +427,6 @@
             padding-bottom: 10px;
         }
 
-        /* Estilos para Markdown - Contenido del changelog */
         .changelog-content {
             line-height: 1.6;
             color: #e0e0e0;
@@ -567,7 +552,6 @@
             padding: 20px 0;
         }
 
-        /* Scrollbar personalizado */
         .sidebar::-webkit-scrollbar,
         .main-content::-webkit-scrollbar {
             width: 8px;
@@ -588,7 +572,6 @@
             background: rgba(255, 255, 255, 0.5);
         }
 
-        /* Responsive */
         @media (max-width: 768px) {
             .content-container {
                 flex-direction: column;
@@ -633,7 +616,6 @@
     </style>
 </head>
 <body>
-    <!-- Fondo de video -->
     <div class="video-background">
         <video autoplay muted loop playsinline>
             <source src="media_files/animated_blurry_chimney.mp4" type="video/mp4">
@@ -642,39 +624,29 @@
         <div class="video-overlay"></div>
     </div>
 
-    <!-- Logo en la parte superior -->
     <div class="header">
         <div class="logo">
             <img src="media_files/logo_mc2.png" alt="Logo del Juego">
         </div>
     </div>
 
-    <!-- Contenedor de recuadros de texto -->
     <div class="content-container">
-        <!-- Recuadro delgado vertical (izquierda) -->
         <div class="sidebar">
             <div class="versions-title">VERSIONES</div>
-            <div id="versions-list">
-                <!-- Las versiones se cargarán aquí dinámicamente -->
-            </div>
+            <div id="versions-list"></div>
         </div>
 
-        <!-- Recuadro grande (centro) -->
         <div class="main-content" id="version-details">
             <div class="loading">Selecciona una versión para ver los detalles</div>
         </div>
     </div>
 
-    <!-- Botón de volver atrás -->
     <button class="back-button" onclick="goBack()">↩</button>
 
-    <!-- Modal de selección (contenedor dinámico) -->
     <div class="modal-overlay" id="modalOverlay">
         <div class="modal-content">
             <div class="modal-title" id="modalTitle">v0.0.0</div>
-            <div class="modal-buttons" id="modalButtonsContainer">
-                <!-- Los botones se generarán dinámicamente según la versión -->
-            </div>
+            <div class="modal-buttons" id="modalButtonsContainer"></div>
         </div>
     </div>
 
@@ -683,18 +655,15 @@
         const META_JSON_URL = 'https://raw.githubusercontent.com/Kart0/mc1.5_multiplayer_experience/refs/heads/main/meta.json';
         
         // Versión base fija (siempre visible arriba)
-        const BASE_VERSION_ID = '0.2.0';
+        const BASE_VERSION_ID = '0.4.0';
 
-        // Variables globales
         let currentVersionId = '';
         let currentVersionData = null;
 
-        // Función para volver atrás
         function goBack() {
             window.location.href = 'index.html';
         }
 
-        // Configurar Marked.js para mejor renderizado
         marked.setOptions({
             highlight: function(code, lang) {
                 return code;
@@ -703,7 +672,6 @@
             gfm: true
         });
 
-        // Función para formatear la fecha
         function formatDate(timestamp) {
             const date = new Date(timestamp);
             return date.toLocaleDateString('es-ES', {
@@ -713,20 +681,20 @@
             });
         }
 
-        // Función para cargar el archivo changelog desde GitHub
+        // NUEVA FUNCIÓN: Comprueba si la versión tiene al menos un enlace de descarga válido
+        function hasDownloadLinks(version) {
+            const downloads = version?.promotions?.downloads;
+            if (!downloads) return false;
+            // Verificar si alguna de las propiedades base, modrinth o generic existe y no es cadena vacía
+            return !!(downloads.base || downloads.modrinth || downloads.generic);
+        }
+
         async function loadChangelogFromGitHub(versionId) {
             try {
-                // Nota: La URL base de los archivos changelog debe apuntar al mismo repositorio que el meta.json.
-                // Como cambiaste el meta.json, también debo ajustar la base de los changelogs.
-                // Voy a usar la misma raíz del nuevo meta.json: https://raw.githubusercontent.com/Kart0/mc1.5_multiplayer_experience/main/
                 const GITHUB_BASE_URL = 'https://raw.githubusercontent.com/Kart0/mc1.5_multiplayer_experience/main';
                 const url = `${GITHUB_BASE_URL}/versions/${versionId}/changelog.txt`;
                 const response = await fetch(url);
-                
-                if (!response.ok) {
-                    return null;
-                }
-                
+                if (!response.ok) return null;
                 return await response.text();
             } catch (error) {
                 console.error(`Error cargando changelog para versión ${versionId}:`, error);
@@ -734,145 +702,112 @@
             }
         }
 
-        // Función para cerrar el modal
         function cerrarModal() {
-            const modalOverlay = document.getElementById('modalOverlay');
-            modalOverlay.classList.remove('active');
+            document.getElementById('modalOverlay').classList.remove('active');
         }
 
-        // Función para mostrar el modal de descarga (totalmente dinámico)
         function mostrarModalDescarga(versionId) {
             currentVersionId = versionId;
-            
-            // Buscar los datos de la versión actual
-            const versionData = window.versionsData.find(v => v.id === versionId);
-            currentVersionData = versionData;
+            currentVersionData = window.versionsData.find(v => v.id === versionId);
             
             const modalTitle = document.getElementById('modalTitle');
             modalTitle.textContent = `v${versionId}`;
             
             const container = document.getElementById('modalButtonsContainer');
-            container.innerHTML = ''; // Limpiar botones anteriores
+            container.innerHTML = '';
             
-            // Verificar si existe la propiedad 'base' dentro de promotions.downloads
-            const downloads = versionData?.promotions?.downloads;
+            const downloads = currentVersionData?.promotions?.downloads;
             const hasBase = downloads && downloads.base;
             
             if (hasBase) {
-                // --- CASO: BOTÓN ÚNICO (BASE) ---
                 const baseUrl = downloads.base;
                 const button = document.createElement('button');
                 button.className = 'modal-button';
-                // Crear imagen con modpack_logo.png
                 const img = document.createElement('img');
                 img.src = 'media_files/modpack_logo.png';
                 img.alt = 'Descargar Base';
                 button.appendChild(img);
                 button.onclick = () => {
-                    if (baseUrl) {
-                        window.open(baseUrl, '_blank');
-                    } else {
-                        console.log('No hay URL base disponible');
-                    }
+                    if (baseUrl) window.open(baseUrl, '_blank');
                     cerrarModal();
                 };
                 container.appendChild(button);
             } else {
-                // --- CASO: DOS BOTONES (MODRINTH y GENERIC/SKLAUNCHER) ---
                 const modrinthUrl = downloads?.modrinth || null;
                 const genericUrl = downloads?.generic || null;
                 
-                // Botón Modrinth
                 if (modrinthUrl) {
-                    const btnModrinth = document.createElement('button');
-                    btnModrinth.className = 'modal-button';
+                    const btnMod = document.createElement('button');
+                    btnMod.className = 'modal-button';
                     const imgMod = document.createElement('img');
                     imgMod.src = 'media_files/Modrinth_Logo.png';
                     imgMod.alt = 'Modrinth';
-                    btnModrinth.appendChild(imgMod);
-                    btnModrinth.onclick = () => {
+                    btnMod.appendChild(imgMod);
+                    btnMod.onclick = () => {
                         window.open(modrinthUrl, '_blank');
                         cerrarModal();
                     };
-                    container.appendChild(btnModrinth);
+                    container.appendChild(btnMod);
                 }
                 
-                // Botón SKLauncher (generic)
                 if (genericUrl) {
-                    const btnGeneric = document.createElement('button');
-                    btnGeneric.className = 'modal-button';
+                    const btnGen = document.createElement('button');
+                    btnGen.className = 'modal-button';
                     const imgGen = document.createElement('img');
                     imgGen.src = 'media_files/SKLauncher_Logo.png';
                     imgGen.alt = 'SKLauncher';
-                    btnGeneric.appendChild(imgGen);
-                    btnGeneric.onclick = () => {
+                    btnGen.appendChild(imgGen);
+                    btnGen.onclick = () => {
                         window.open(genericUrl, '_blank');
                         cerrarModal();
                     };
-                    container.appendChild(btnGeneric);
+                    container.appendChild(btnGen);
                 }
             }
             
-            // Si por alguna razón no hay ningún botón (no debería), mostramos un mensaje
             if (container.children.length === 0) {
                 container.innerHTML = '<p style="color:white;">No hay enlaces de descarga disponibles.</p>';
             }
             
-            const modalOverlay = document.getElementById('modalOverlay');
-            modalOverlay.classList.add('active');
+            document.getElementById('modalOverlay').classList.add('active');
         }
 
-        // Función para mostrar los detalles de una versión (solo changelog)
         async function showVersionDetails(versionId) {
             const detailsContainer = document.getElementById('version-details');
             detailsContainer.innerHTML = '<div class="loading">Cargando changelog...</div>';
-
             try {
-                // Cargar solo el archivo changelog
                 const changelogContent = await loadChangelogFromGitHub(versionId);
-
                 if (changelogContent) {
-                    const htmlContent = `
-                        <div class="changelog-content">
-                            ${marked.parse(changelogContent)}
-                        </div>
-                    `;
-                    detailsContainer.innerHTML = htmlContent;
+                    detailsContainer.innerHTML = `<div class="changelog-content">${marked.parse(changelogContent)}</div>`;
                 } else {
                     detailsContainer.innerHTML = '<div class="error">No se encontró el changelog para esta versión</div>';
                 }
-
             } catch (error) {
-                console.error('Error cargando detalles de la versión:', error);
+                console.error(error);
                 detailsContainer.innerHTML = '<div class="error">Error cargando el changelog de la versión</div>';
             }
         }
 
-        // Función para crear el elemento HTML de una versión
+        // MODIFICACIÓN: createVersionElement ahora usa hasDownloadLinks
         function createVersionElement(version, isBaseVersion = false, isFirstUpdate = false) {
             const versionElement = document.createElement('div');
             versionElement.className = 'version-item';
+            if (isBaseVersion) versionElement.classList.add('base-version');
+            if (isBaseVersion) versionElement.classList.add('selected');
             
-            if (isBaseVersion) {
-                versionElement.classList.add('base-version');
-            }
-            
-            // Solo agregar selected si es la versión base (para que aparezca seleccionada por defecto)
-            if (isBaseVersion) {
-                versionElement.classList.add('selected');
-            }
-            
-            // Determinar si debe mostrar el botón de descarga
+            // Determinar si mostrar botón de descarga:
+            // - Debe ser versión base o primera actualización
+            // - Y además la versión debe tener al menos un enlace de descarga
+            const hasLinks = hasDownloadLinks(version);
             let showDownloadButton = false;
-            if (isBaseVersion) {
-                showDownloadButton = true; // La versión base SIEMPRE tiene botón
-            } else if (isFirstUpdate) {
-                showDownloadButton = true; // La primera actualización (más reciente) tiene botón
+            if (isBaseVersion && hasLinks) {
+                showDownloadButton = true;
+            } else if (isFirstUpdate && hasLinks) {
+                showDownloadButton = true;
             }
             
             const buttonHtml = showDownloadButton ? 
-                `<button class="version-button" onclick="mostrarModalDescarga('${version.id}')">⤓</button>` : 
-                '';
+                `<button class="version-button" onclick="mostrarModalDescarga('${version.id}')">⤓</button>` : '';
             
             versionElement.innerHTML = `
                 <div class="version-info">
@@ -883,105 +818,73 @@
             `;
             
             versionElement.addEventListener('click', () => {
-                // Remover selección de todos los items
-                document.querySelectorAll('.version-item').forEach(item => {
-                    item.classList.remove('selected');
-                });
-                // Agregar selección al item clickeado
+                document.querySelectorAll('.version-item').forEach(item => item.classList.remove('selected'));
                 versionElement.classList.add('selected');
-                // Cargar detalles de la versión seleccionada
                 showVersionDetails(version.id);
             });
             
             return versionElement;
         }
 
-        // Función para cargar las versiones desde el JSON
         async function loadVersions() {
             try {
-                // Agregar timestamp para evitar cache
                 const response = await fetch(META_JSON_URL + '?t=' + new Date().getTime());
                 const data = await response.json();
-                
-                // Guardar los datos de versiones globalmente
                 window.versionsData = data.versions;
                 
                 const versionsList = document.getElementById('versions-list');
                 versionsList.innerHTML = '';
                 
-                // Separar la versión base del resto
                 const baseVersion = data.versions.find(v => v.id === BASE_VERSION_ID);
                 const otherVersions = data.versions.filter(v => v.id !== BASE_VERSION_ID);
-                
-                // Ordenar las otras versiones por fecha (más reciente primero)
                 const sortedOtherVersions = otherVersions.sort((a, b) => b.releasedAt - a.releasedAt);
                 
-                // 1. SECCIÓN: Versión Base (si existe)
                 if (baseVersion) {
                     const baseSection = document.createElement('div');
                     baseSection.className = 'base-version-section';
-                    
                     const baseTitle = document.createElement('div');
                     baseTitle.className = 'base-version-title';
                     baseTitle.textContent = '⚡ VERSION BASE ⚡';
                     baseSection.appendChild(baseTitle);
-                    
                     const baseElement = createVersionElement(baseVersion, true, false);
                     baseSection.appendChild(baseElement);
-                    
                     versionsList.appendChild(baseSection);
                 }
                 
-                // 2. SECCIÓN: Actualizaciones (si hay)
                 if (sortedOtherVersions.length > 0) {
                     const updatesSection = document.createElement('div');
                     updatesSection.className = 'updates-section';
-                    
                     const updatesTitle = document.createElement('div');
                     updatesTitle.className = 'updates-title';
                     updatesTitle.textContent = '📦 ACTUALIZACIONES 📦';
                     updatesSection.appendChild(updatesTitle);
                     
-                    // Crear elementos para cada actualización
                     sortedOtherVersions.forEach((version, index) => {
                         const isFirstUpdate = (index === 0);
                         const versionElement = createVersionElement(version, false, isFirstUpdate);
                         updatesSection.appendChild(versionElement);
                     });
-                    
                     versionsList.appendChild(updatesSection);
                 }
                 
-                // Seleccionar la versión base por defecto y cargar su changelog
                 if (baseVersion) {
                     showVersionDetails(baseVersion.id);
                 } else if (sortedOtherVersions.length > 0) {
-                    // Si no hay versión base, seleccionar la primera actualización
                     showVersionDetails(sortedOtherVersions[0].id);
                 }
                 
             } catch (error) {
                 console.error('Error cargando las versiones:', error);
-                document.getElementById('versions-list').innerHTML = 
-                    '<div class="error">Error cargando versiones</div>';
+                document.getElementById('versions-list').innerHTML = '<div class="error">Error cargando versiones</div>';
             }
         }
 
-        // Asegurar que el video se reproduzca correctamente
         document.addEventListener('DOMContentLoaded', function() {
             const video = document.querySelector('video');
-            video.play().catch(function(error) {
-                console.log('Error al reproducir el video automáticamente:', error);
-            });
-            
-            // Cargar las versiones cuando la página esté lista
+            video.play().catch(e => console.log('Error al reproducir el video:', e));
             loadVersions();
-
-            // Cerrar modal al hacer click fuera del contenido
             document.getElementById('modalOverlay').addEventListener('click', function(e) {
-                if (e.target === this) {
-                    cerrarModal();
-                }
+                if (e.target === this) cerrarModal();
             });
         });
     </script>
