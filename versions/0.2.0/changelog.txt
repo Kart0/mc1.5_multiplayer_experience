@@ -2,7 +2,7 @@
 
 Notificador de actualizaciones agregado, la pagina web para las actualizaciones ha sido finalmente liberada y también un par de mods han sido agregados para ampliar la compatibilidad de características entre más servidores.
 
-![teaser](teaser.gif)
+![teaser](https://i.imgur.com/YFSGpPv.gif)
 
 ***Nota del desarrollador***
 
