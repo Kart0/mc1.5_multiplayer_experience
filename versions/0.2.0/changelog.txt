@@ -2,7 +2,7 @@
 
 Notificador de actualizaciones agregado, la pagina web para las actualizaciones ha sido finalmente liberada y también un par de mods han sido agregados para ampliar la compatibilidad de características entre más servidores.
 
-![teaser_v0.2.0](./imagen_local.gif)
+![teaser](teaser.gif)
 
 ***Nota del desarrollador***
 
