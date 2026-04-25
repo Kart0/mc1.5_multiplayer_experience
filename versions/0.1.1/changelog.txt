@@ -2,6 +2,7 @@
 
 Cambios menores realizados para arreglar inconsistencias visuales en interfaces y gameplay
 
+![teaser_v0.1.1](https://i.imgur.com/X09uqnX.png)
 
 ***Nota del desarrollador***
 

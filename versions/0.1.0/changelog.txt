@@ -4,6 +4,7 @@
 
 El objetivo de ésta versión es tratar de brindar todas las mejoras gráficas posibles (de todas las que se admiten) para poder entrar a cualquier servidor MULTIJUGADOR, sea SKYWARS, SMP, UHC, etc etc etc
 
+![teaser_v0.1.0](https://i.imgur.com/72yzNaY.png)
 
 ***Nota del desarrollador***
 
