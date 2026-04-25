@@ -3,7 +3,7 @@
 Notificador de actualizaciones agregado, la pagina web para las actualizaciones ha sido finalmente liberada y también un par de mods han sido agregados para ampliar la compatibilidad de características entre más servidores.
 
 <video autoplay muted loop playsinline>
-  <source src="teaser.mp4" type="video/mp4">
+  <source src="http://i.imgur.com/9ismphP.mp4" type="video/mp4">
 </video>
 
 ***Nota del desarrollador***
