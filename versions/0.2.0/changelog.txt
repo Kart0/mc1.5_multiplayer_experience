@@ -2,6 +2,10 @@
 
 Notificador de actualizaciones agregado, la pagina web para las actualizaciones ha sido finalmente liberada y también un par de mods han sido agregados para ampliar la compatibilidad de características entre más servidores.
 
+<video autoplay muted loop playsinline>
+  <source src="teaser.mp4" type="video/mp4">
+</video>
+
 ***Nota del desarrollador***
 
 *Me ha tomado un buen de tiempo, pero pude programar un notificador interno dentro del propio MENU, la odisea fue tremenda y probablemente algún día la cuente.... lo más importante es que ya está 100% funcional sin errores*
