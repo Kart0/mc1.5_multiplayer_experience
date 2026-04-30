@@ -142,12 +142,13 @@
             box-shadow: 0 0 30px rgba(0, 0, 0, 0.6);
         }
 
-        .back-button {
+        /* Botón de Ko-fi (anteriormente back-button) */
+        .kofi-button {
             position: fixed;
             top: 30px;
-            left: 30px;
-            width: 60px;
-            height: 60px;
+            left: 45px;
+            width: 75px;
+            height: 75px;
             border: none;
             cursor: pointer;
             transition: all 0.3s ease;
@@ -161,14 +162,14 @@
             text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
         }
 
-        .back-button::before {
+        .kofi-button::before {
             content: '';
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background-image: url('media_files/square_button.png');
+            background-image: url('media_files/mc2_kofisupport.png');
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
@@ -177,18 +178,19 @@
             border-radius: 0;
         }
 
-        .back-button:hover::before {
-            background-image: url('media_files/square_button_highlighted.png');
+        .kofi-button:hover::before {
+            background-image: url('media_files/mc2_kofisupport_hovered.png');
         }
 
-        .back-button:hover {
+        .kofi-button:hover {
             transform: translateY(-3px);
         }
 
-        .back-button:active {
+        .kofi-button:active {
             transform: translateY(0);
         }
 
+        /* El resto del CSS continúa igual hasta el final */
         .base-version-section {
             margin-bottom: 20px;
             border-bottom: 2px solid rgba(255, 215, 0, 0.3);
@@ -290,8 +292,6 @@
             z-index: 2;
         }
 
-        /* La versión base SIEMPRE tiene el botón visible (pero ahora condicionado por existencia de enlaces) */
-        /* El CSS no cambia, la lógica está en JS */
         .version-button::before {
             content: '';
             position: absolute;
@@ -605,7 +605,7 @@
                 height: 120px;
             }
 
-            .back-button {
+            .kofi-button {
                 width: 50px;
                 height: 50px;
                 font-size: 1.6em;
@@ -641,7 +641,8 @@
         </div>
     </div>
 
-    <button class="back-button" onclick="goBack()">↩</button>
+    <!-- Botón de Ko-fi con enlace externo -->
+    <button class="kofi-button" onclick="window.open('https://ko-fi.com/kartillomc2', '_blank')"></button>
 
     <div class="modal-overlay" id="modalOverlay">
         <div class="modal-content">
@@ -660,9 +661,7 @@
         let currentVersionId = '';
         let currentVersionData = null;
 
-        function goBack() {
-            window.location.href = 'index.html';
-        }
+        // Eliminada la función goBack()
 
         marked.setOptions({
             highlight: function(code, lang) {
@@ -681,11 +680,10 @@
             });
         }
 
-        // NUEVA FUNCIÓN: Comprueba si la versión tiene al menos un enlace de descarga válido
+        // Función: comprueba si la versión tiene al menos un enlace de descarga válido
         function hasDownloadLinks(version) {
             const downloads = version?.promotions?.downloads;
             if (!downloads) return false;
-            // Verificar si alguna de las propiedades base, modrinth o generic existe y no es cadena vacía
             return !!(downloads.base || downloads.modrinth || downloads.generic);
         }
 
@@ -788,16 +786,12 @@
             }
         }
 
-        // MODIFICACIÓN: createVersionElement ahora usa hasDownloadLinks
         function createVersionElement(version, isBaseVersion = false, isFirstUpdate = false) {
             const versionElement = document.createElement('div');
             versionElement.className = 'version-item';
             if (isBaseVersion) versionElement.classList.add('base-version');
             if (isBaseVersion) versionElement.classList.add('selected');
             
-            // Determinar si mostrar botón de descarga:
-            // - Debe ser versión base o primera actualización
-            // - Y además la versión debe tener al menos un enlace de descarga
             const hasLinks = hasDownloadLinks(version);
             let showDownloadButton = false;
             if (isBaseVersion && hasLinks) {
