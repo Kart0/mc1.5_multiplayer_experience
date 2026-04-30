@@ -1,12 +1,24 @@
-## **CAMBIOS HECHOS V0.2.0**
+## **CAMBIOS HECHOS v0.2.0**
 
 Notificador de actualizaciones agregado, la pagina web para las actualizaciones ha sido finalmente liberada y también un par de mods han sido agregados para ampliar la compatibilidad de características entre más servidores.
 
 ![teaser](https://i.imgur.com/YFSGpPv.gif)
 
+<details>
+  <summary>Cambios detallados</summary>
+
+  * Servers multijugador añadidos _**(algunos requieren que se aplique "ipconfig /flushdns" en CMD antes de entrar a ellos)**_
+  * Chat de voz añadido para que haya comunicación en los servidores compatibles _(TTS añadido también)_
+  * Emotes añadidos para mejorar la comunicación no verbal en los servidores compatibles
+  * Interfaces ajustadas correctamente para poder ofrecer una experiencia más inmersiva
+  * Packs de recursos añadidos y ajustados para que sean congruentes con el estilo general del mundo
+  * Mi propio archivo de idioma ha sido creado, lo que me permitirá crear dialogos personalizados en todos los idiomas existentes dentro de Minecraft
+</details>
+
 ***Nota del desarrollador***
 
 *Me ha tomado un buen de tiempo, pero pude programar un notificador interno dentro del propio MENU, la odisea fue tremenda y probablemente algún día la cuente.... lo más importante es que ya está 100% funcional sin errores*
 
+_Una forma de ayudar al desarrollador de esta experiencia (osea yoxd) [ha sido creada](https://ko-fi.com/kartillomc2), el apoyo es voluntario ya que este proyecto sale directo del amor que le tengo a este grandioso juego, nunca habrá nada de pago y el mantenimiento (correcciones de bugs y añadidos) siempre será gratis_
 
 **-karto**
